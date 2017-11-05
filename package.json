@@ -1,0 +1,31 @@
+{
+  "name": "normalize-media",
+  "version": "1.0.0",
+  "description": "A suite of tools to convert the media I typically work with.  Can be used as a starting point for how you can normalize your own media.",
+  "main": "index.js",
+  "scripts": {
+    "normalize": "./index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/brainthinks/normalizeMedia.git"
+  },
+  "keywords": [
+    "media",
+    "ffmpeg",
+    "mkv",
+    "video",
+    "audio",
+    "convert"
+  ],
+  "author": "Brian Andress",
+  "license": "GPL-3.0",
+  "bugs": {
+    "url": "https://github.com/brainthinks/normalizeMedia/issues"
+  },
+  "homepage": "https://github.com/brainthinks/normalizeMedia#readme",
+  "dependencies": {
+    "filehound": "^1.16.2"
+  }
+}
