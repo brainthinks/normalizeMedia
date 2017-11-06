@@ -25,5 +25,9 @@
     "url": "https://github.com/brainthinks/normalizeMedia/issues"
   },
   "homepage": "https://github.com/brainthinks/normalizeMedia#readme",
-  "dependencies": {}
+  "dependencies": {
+    "mkdirp": "^0.5.1",
+    "mv": "^2.1.1",
+    "uuid": "^3.1.0"
+  }
 }
