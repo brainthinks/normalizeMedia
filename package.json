@@ -25,7 +25,5 @@
     "url": "https://github.com/brainthinks/normalizeMedia/issues"
   },
   "homepage": "https://github.com/brainthinks/normalizeMedia#readme",
-  "dependencies": {
-    "filehound": "^1.16.2"
-  }
+  "dependencies": {}
 }
