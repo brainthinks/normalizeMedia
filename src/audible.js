@@ -86,11 +86,13 @@ async function mkvGetInfo (mkvPath) {
     title = 'Unknown';
   }
 
-  return {
+  const mkvInfo = {
     author,
     title,
     chapters,
   };
+
+  return mkvInfo;
 }
 
 async function aax2mkv (activationBytes, sourcePath, destinationDirectory) {
@@ -196,9 +198,15 @@ async function mkv2mp3 (mkvPath, jpegPath, destinationDirectory, mkvInfo) {
         '-metadata', `artist=${mkvInfo.author}`,
         '-metadata', `album=${mkvInfo.title}`,
         '-metadata', `genre=audiobook`,
+        // make the mp3s 192k
         '-c:a', 'libmp3lame',
         '-b:a', '192k',
+        // fix timestamp issues
+        // https://trac.ffmpeg.org/wiki/Seeking#Cuttingsmallsections
         '-avoid_negative_ts', '1',
+        // Support Windows Media Player, barf
+        // https://answers.microsoft.com/en-us/windows/forum/windows_7-pictures/how-to-add-id3v24-support-for-windows-7-64bit/a9427521-eb6f-4fe4-affb-f61532846503?auth=1
+        '-id3v2_version', '3',
         // don't copy the subtitles
         '-sn',
         // copy the cover art
