@@ -92,7 +92,13 @@ Once this is done, your audiobook is what I consider "normalized" - all of your 
 
 I specifically targed the android app Voice ([https://github.com/PaulWoitaschek/Voice](https://github.com/PaulWoitaschek/Voice)), which is available on the Google Play Store and FDroid, because I listen to these audiobooks in my car, and playing them on a small tablet is the best way I have found to reliably play media in my car.  The portable folders work intuitively with Voice with no modifications.
 
+Linux:
+
 `npm run normalize activation_bytes /path/to/aax/files /path/to/put/normalized/files`
+
+Windows:
+
+`node index.js activation_bytes /path/to/aax/files /path/to/put/normalized/files`
 
 
 ### Convert Dashcam Videos
