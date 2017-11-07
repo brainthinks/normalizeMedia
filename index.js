@@ -8,7 +8,7 @@ const utils = require('./utils/');
 // const dashcam = require('./src/dashcam');
 const { normalizeAudiobooks } = require('./src/audible');
 
-async function main (activationBytes, rawSourceDirectory) {
+async function main (activationBytes, rawSourceDirectory, rawDestinationDirectory) {
   if (!rawSourceDirectory) {
     throw new Error('You need to tell me where the files you want to convert are located.');
   }
@@ -23,7 +23,20 @@ async function main (activationBytes, rawSourceDirectory) {
     fs.constants.R_OK | fs.constants.W_OK
   );
 
-  await normalizeAudiobooks(activationBytes, sourceDirectory);
+  let destinationDirectory;
+
+  if (rawDestinationDirectory) {
+    destinationDirectory = path.resolve(rawDestinationDirectory);
+
+    // Ensure that the source directory exists, and that we can read and write to it
+    await utils.async.toPromise(
+      fs.access,
+      destinationDirectory,
+      fs.constants.R_OK | fs.constants.W_OK
+    );
+  }
+
+  await normalizeAudiobooks(activationBytes, sourceDirectory, destinationDirectory);
 }
 
 main(...utils.getArgs())

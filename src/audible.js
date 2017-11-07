@@ -40,19 +40,21 @@ async function mkvGetInfo (mkvPath) {
   let currentUIDIndex = -1;
 
   // Parse the mkv info to get what we need
+  // @todo - change these to slice, since we know the exact characters we're
+  // looking for
   for (let i = 0; i < rawLines.length; i++) {
     const trimmedLine = rawLines[i].slice(1).trim();
 
     if (trimmedLine === '+ Name: ALBUM_ARTIST') {
       // advance the counter because we need the next line
       i++;
-      author = rawLines[i].slice(1).trim().split(':')[1].trim();
+      author = rawLines[i].slice(1).trim().split('String:')[1].trim();
     }
 
     if (trimmedLine === '+ Name: ALBUM') {
       // advance the counter because we need the next line
       i++;
-      title = rawLines[i].slice(1).trim().split(':')[1].trim();
+      title = rawLines[i].slice(1).trim().split('String:')[1].trim();
     }
 
     if (trimmedLine.startsWith('+ ChapterUID:')) {
@@ -71,7 +73,7 @@ async function mkvGetInfo (mkvPath) {
     }
 
     if (trimmedLine.startsWith('+ ChapterString:')) {
-      chapters[currentUIDIndex].name = trimmedLine.split(':')[1].trim();
+      chapters[currentUIDIndex].name = trimmedLine.split('ChapterString:')[1].trim();
     }
   }
 
@@ -224,6 +226,24 @@ async function mkv2mp3 (mkvPath, jpegPath, destinationDirectory, mkvInfo) {
   });
 }
 
+async function mkv2portable (mkvPath, destinationDirectory, mkvInfo) {
+  if (!mkvInfo) {
+    mkvInfo = await mkvGetInfo(mkvPath);
+  }
+
+  const portableDirectory = path.join(
+    destinationDirectory,
+    utils.fs.sanitizeFileName(mkvInfo.author),
+    utils.fs.sanitizeFileName(mkvInfo.title),
+  );
+
+  await utils.fs.mkdirp(portableDirectory);
+
+  const jpegPath = await mkv2jpeg(mkvPath, portableDirectory, mkvInfo);
+
+  await mkv2mp3(mkvPath, jpegPath, portableDirectory, mkvInfo);
+}
+
 async function normalizeAudiobooks (activationBytes, sourceDirectory, destinationDirectory = sourceDirectory) {
   const aaxFiles = (await utils.async.toPromise(fs.readdir, sourceDirectory))
     .filter((fileName) => path.extname(fileName).toLowerCase() === AAX_FILE_EXT_LC);
@@ -238,18 +258,7 @@ async function normalizeAudiobooks (activationBytes, sourceDirectory, destinatio
 
     // At this point, the audiobooks are normalized, and work fine on a computer,
     // but they aren't particularly useful.  Let's make them portable.
-
-    const portableDirectory = path.join(
-      destinationDirectory,
-      utils.fs.sanitizeFileName(mkvInfo.author),
-      utils.fs.sanitizeFileName(mkvInfo.title),
-    );
-
-    await utils.fs.mkdirp(portableDirectory);
-
-    const jpegPath = await mkv2jpeg(mkvPath, portableDirectory, mkvInfo);
-
-    await mkv2mp3(mkvPath, jpegPath, portableDirectory, mkvInfo);
+    await mkv2portable(mkvPath, destinationDirectory, mkvInfo);
   });
 }
 
@@ -259,5 +268,6 @@ module.exports = {
   aax2mkv,
   mkv2jpeg,
   mkv2mp3,
+  mkv2portable,
   normalizeAudiobooks,
 };
