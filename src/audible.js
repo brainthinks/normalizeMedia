@@ -198,9 +198,9 @@ async function mkv2mp3 (mkvPath, jpegPath, destinationDirectory, mkvInfo) {
         '-metadata', `artist=${mkvInfo.author}`,
         '-metadata', `album=${mkvInfo.title}`,
         '-metadata', `genre=audiobook`,
-        // make the mp3s 192k
+        // make the mp3s 128kbps
         '-c:a', 'libmp3lame',
-        '-b:a', '192k',
+        '-b:a', '128k',
         // fix timestamp issues
         // https://trac.ffmpeg.org/wiki/Seeking#Cuttingsmallsections
         '-avoid_negative_ts', '1',
