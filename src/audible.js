@@ -2,7 +2,6 @@
 
 const fs = require('fs');
 const path = require('path');
-const { exec } = require('child_process');
 const uuid = require('uuid');
 
 const utils = require('../utils/');
@@ -234,6 +233,15 @@ async function mkv2mp3 (mkvPath, jpegPath, destinationDirectory, mkvInfo) {
   });
 }
 
+/**
+ * Generate a "portable" version of the mkv in mp3 format.
+ *
+ * @param {*} mkvPath
+ *   The absolute path to the mkv file to convert
+ *
+ * @param {*} destinationDirectory
+ *   The absolute path to the directory to write the portable directories to
+ */
 async function mkv2portable (mkvPath, destinationDirectory, mkvInfo) {
   if (!mkvInfo) {
     mkvInfo = await mkvGetInfo(mkvPath);
